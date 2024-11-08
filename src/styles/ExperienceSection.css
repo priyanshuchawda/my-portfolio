@@ -1,0 +1,83 @@
+/* ExperienceSection.css */
+
+.experience {
+  padding: 50px;
+  background-color: #f4f4f9;
+  color: #333;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.dark-mode .experience {
+  background-color: #444;
+  color: #ddd;
+}
+
+.experience-item {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 15px;
+  transition: transform 0.3s ease, background-color 0.3s ease; /* Add background-color transition */
+  text-align: left; /* Align text to the left */
+  display: flex; /* Added for better layout with logo */
+  align-items: center; /* Center align items vertically */
+}
+
+.experience-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .experience-item {
+  background-color: #333; /* Dark background for the box in dark mode */
+  border: 1px solid #555; /* Darker border for better contrast */
+}
+
+.dark-mode .experience-item:hover {
+  background-color: #a777e3; /* Purple hover background in dark mode */
+}
+
+.experience-item h3 {
+  margin: 0 0 10px;
+}
+
+.experience-item p {
+  margin: 5px 0;
+}
+
+.company-logo {
+  width: 50px; /* Adjust size as needed */
+  height: auto;
+  margin-right: 15px; /* Space between logo and text */
+  transition: transform 0.3s ease;
+}
+
+.company-logo:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+@media (max-width: 768px) {
+  .experience {
+    padding: 30px; /* Reduced padding for smaller screens */
+  }
+
+  .experience-item {
+    padding: 15px; /* Adjust padding */
+    flex-direction: column; /* Stack items on small screens */
+    align-items: flex-start; /* Align items to the start */
+  }
+
+  .company-logo {
+    width: 40px; /* Smaller on mobile */
+    margin-bottom: 10px; /* Margin below logo */
+    margin-right: 0; /* Remove right margin on mobile */
+  }
+}

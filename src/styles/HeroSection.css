@@ -1,0 +1,83 @@
+.hero {
+  padding: 100px 0; /* Adjusted padding */
+  background-color: var(--background); /* Updated to use CSS variables */
+  color: var(--text-color); /* Updated to use CSS variables */
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: 800px; /* Added max-width for better content alignment */
+  margin: 0 auto; /* Centered content */
+}
+
+.hero h1 {
+  font-size: 3em; /* Increased font size */
+  margin-bottom: 20px;
+  color: var(--accent-color); /* Updated to use CSS variable */
+  animation: slideIn 1s ease-out; /* Retained slide-in animation */
+}
+
+.hero p {
+  font-size: 1.2em; /* Adjusted font size */
+  margin-bottom: 30px;
+  color: var(--text-color-secondary); /* Updated to use CSS variable */
+  animation: fadeIn 2s ease-in-out; /* Retained fade-in animation */
+}
+
+.hero-button {
+  padding: 15px 30px; /* Adjusted padding */
+  background-color: var(--accent-color); /* Updated to use CSS variable */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 1em;
+}
+
+.hero-button:hover {
+  background-color: #5a7bd9; /* Slightly adjusted hover color */
+  transform: scale(1.05); /* Kept hover transform */
+}
+
+.dark-mode .hero {
+  background-color: #2c2c2c; /* Dark mode background */
+  color: #ddd; /* Dark mode text color */
+}
+
+.dark-mode .hero h1 {
+  color: #a777e3; /* Dark mode heading color */
+}
+
+.dark-mode .hero p {
+  color: #ccc; /* Dark mode paragraph color */
+}
+
+.dark-mode .hero-button {
+  background-color: #a777e3; /* Dark mode button color */
+}
+
+.dark-mode .hero-button:hover {
+  background-color: #b38ee6; /* Dark mode button hover color */
+}
+
+/* Keyframe animations retained for fade-in and slide-in effects */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* You can also include .hero-image styles if you need to keep an image */
+.hero-image {
+  width: 150px; /* Image width */
+  border-radius: 50%; /* Rounded image */
+  animation: fadeIn 2s ease-in-out; /* Fade-in animation for images */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Shadow for images */
+}

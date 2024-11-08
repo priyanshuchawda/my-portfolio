@@ -1,0 +1,42 @@
+.resume {
+    padding: 50px;
+    background-color: #f4f4f9;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .resume h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+  
+  .resume-button {
+    padding: 10px 20px;
+    background-color: #6e8efb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+  }
+  
+  .resume-button:hover {
+    background-color: #5a7dd2;
+    transform: scale(1.05);
+  }
+  
+  .dark-mode .resume {
+    background-color: #444;
+    color: #ddd;
+  }
+  
+  .dark-mode .resume-button {
+    background-color: #333;
+  }
+  
+  .dark-mode .resume-button:hover {
+    background-color: #555;
+  }

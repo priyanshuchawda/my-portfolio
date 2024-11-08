@@ -1,0 +1,66 @@
+.education {
+    padding: 50px;
+    background-color: #f4f4f9;
+    color: #333;
+    transition: background-color 0.5s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .education {
+    background-color: #2c2c2c;
+    color: #ddd;
+}
+
+.education h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2em;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.education-item {
+    margin: 15px 0;
+    padding: 20px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.education-item:hover {
+    background-color: #6e8efb;
+    color: white;
+}
+
+.education-item h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.education-item p {
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.education-item a {
+    color: #6e8efb;
+    text-decoration: none;
+}
+
+.education-item a:hover {
+    text-decoration: underline;
+}
+
+.dark-mode .education-item {
+    background-color: #333;
+    color: #ddd;
+}
+
+.dark-mode .education-item:hover {
+    background-color: #a777e3;
+    color: #fff;
+}
+
+.dark-mode .education-item a {
+    color: #a777e3;
+}

@@ -1,0 +1,20 @@
+.social-media-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Space between icons */
+    padding: 20px 0; /* Padding around the icons */
+  }
+  
+  .social-media-icons a {
+    color: #333; /* Change icon color for light mode */
+    font-size: 24px; /* Icon size */
+    transition: color 0.3s ease; /* Transition for hover effect */
+  }
+  
+  .dark-mode .social-media-icons a {
+    color: #fff; /* Change icon color for dark mode */
+  }
+  
+  .social-media-icons a:hover {
+    color: #6e8efb; /* Change color on hover */
+  }

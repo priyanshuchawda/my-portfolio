@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
-import AboutSection from './components/AboutSection'; // Import AboutSection
+import AboutSection from './components/AboutSection';
 import ProjectsSection from './components/ProjectsSection';
-import ExperienceSection from './components/ExperienceSection'; // Ensure you have this component
+import ExperienceSection from './components/ExperienceSection';
 import ResumeSection from './components/ResumeSection';
 import CompetitiveProgrammingJourney from './components/CompetitiveProgrammingJourney';
 import Skills from './components/Skills';
@@ -34,14 +34,14 @@ function App() {
     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <HeroSection />
-      <AboutSection /> {/* Render AboutSection */}
-      <div id="projects-section"> {/* Add ID to Projects Section */}
+      <AboutSection /> 
+      <div id="projects-section"> 
         <ProjectsSection />
       </div>
-      <div id="experience-section"> {/* Added ID to Experience Section */}
+      <div id="experience-section"> 
         <ExperienceSection />
       </div>
-      <div id="skills-section"> {/* Added ID to Skills Section */}
+      <div id="skills-section"> 
         <Skills />
       </div>
       <CompetitiveProgrammingJourney />

@@ -4,7 +4,7 @@ import '../styles/Timeline.css';
 function Timeline() {
   return (
     <div className="timeline">
-      {/* Timeline items removed */}
+      {}
     </div>
   );
 }

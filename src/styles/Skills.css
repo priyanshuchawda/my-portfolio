@@ -47,7 +47,7 @@
   .skill-icon {
     margin-right: 10px;
     font-size: 1.2em;
-    color: #6e8efb; /* Match the hover color */
+    color: #6e8efb; 
   }
 
   .dark-mode .skills li {

@@ -3,7 +3,7 @@ import '../styles/Header.css';
 import { FaSun, FaMoon } from 'react-icons/fa';
 
 function Header({ darkMode, toggleDarkMode }) {
-  // Scroll functions for each section
+
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {

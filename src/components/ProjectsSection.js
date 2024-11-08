@@ -18,7 +18,7 @@ function ProjectsSection() {
       
       github: 'https://github.com/priyanshuchawda'
     },
-    // Add more projects as needed
+   
   ];
 
   const chartRefs = useRef([]);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import ThemeProvider from '../components/ThemeProvider';
+import { ThemeProvider } from '../components/ThemeProvider';
 import { AccessibilityProvider } from '../context/AccessibilityContext';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -12,7 +12,7 @@ interface TestProvidersProps {
 
 export const TestProviders = ({ 
   children, 
-  route = '/', 
+  route = '/',  
   helmetContext = {}
 }: TestProvidersProps) => {
   return (

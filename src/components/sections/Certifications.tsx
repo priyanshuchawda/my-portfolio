@@ -13,7 +13,7 @@ const certifications: Certification[] = [
   {
     title: "AWS Certified Developer",
     issuer: "Amazon Web Services",
-    date: "2023",
+    date: "2023", 
     credentialLink: "#",
     image: "/aws-cert.png", // Add your certification image
     skills: ["AWS Lambda", "DynamoDB", "API Gateway", "CloudFormation"]

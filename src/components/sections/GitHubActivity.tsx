@@ -17,7 +17,7 @@ const GitHubActivity = () => {
   }, []);
 
   const fetchGitHubActivity = async () => {
-    try {
+    try { 
       const username = 'priyanshuchawda';
       const response = await fetch(`https://api.github.com/users/${username}/events/public`);
       

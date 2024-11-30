@@ -10,7 +10,7 @@ interface Project {
   liveUrl?: string;
   twitterUrl?: string;
 }
-
+ 
 const PROJECTS: Project[] = [
   {
     id: '1',

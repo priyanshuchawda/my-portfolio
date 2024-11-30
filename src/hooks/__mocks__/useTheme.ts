@@ -4,3 +4,4 @@ export const useTheme = vi.fn().mockReturnValue({
   isDarkMode: false,
   toggleTheme: vi.fn(),
 });
+ 

@@ -12,7 +12,7 @@ describe('SEO Component', () => {
       const description = document.querySelector('meta[name="description"]')?.getAttribute('content');
       const ogTitle = document.querySelector('meta[property="og:title"]')?.getAttribute('content');
       const ogDescription = document.querySelector('meta[property="og:description"]')?.getAttribute('content');
-      
+       
       // Assert default values
       expect(title).toBe('Priyanshu Chawda - Full Stack Developer');
       expect(description).toBe('Portfolio of Priyanshu Chawda, a Full Stack Developer specializing in React, TypeScript, and Node.js');

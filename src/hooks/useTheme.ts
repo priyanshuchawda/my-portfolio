@@ -1,33 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export const useTheme = () => {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check if user has a theme preference in localStorage
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      return savedTheme === 'dark';
+interface ThemeHook {
+  isDark: boolean;
+  toggleTheme: () => void;
+}
+
+export const useTheme = (): ThemeHook => {
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      return savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
     }
-    // Check if user's system prefers dark mode
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return false;
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
-    if (isDarkMode) {
+    if (isDark) {
       root.classList.add('dark');
       localStorage.setItem('theme', 'dark');
     } else {
       root.classList.remove('dark');
       localStorage.setItem('theme', 'light');
     }
-  }, [isDarkMode]);
+  }, [isDark]);
 
   const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
+    setIsDark(!isDark);
   };
 
-  return {
-    isDarkMode,
-    toggleTheme
-  };
+  return { isDark, toggleTheme };
 };

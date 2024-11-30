@@ -14,7 +14,7 @@ const ThreeContext = createContext<ThreeContextType>({
 export function useThree() {
   return useContext(ThreeContext);
 }
-
+ 
 export function ThreeProvider({ children }: { children: ReactNode }) {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);

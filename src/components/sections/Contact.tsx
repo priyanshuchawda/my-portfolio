@@ -13,7 +13,7 @@ export default function Contact() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setStatus('sending');
-
+ 
     try {
       await emailjs.send(
         'service_uzqbbxz',

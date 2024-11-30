@@ -13,7 +13,7 @@ const experiences = [
     ],
     technologies: ['React', 'Node.js', 'AWS', 'MongoDB'],
   },
-  {
+  { 
     title: 'Software Engineer',
     company: 'Innovation Labs',
     period: '2020 - 2022',

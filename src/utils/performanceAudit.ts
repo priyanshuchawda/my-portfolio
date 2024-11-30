@@ -11,7 +11,7 @@ function getMetricScore(value: number | undefined, good: number, poor: number): 
   if (value >= poor) return 0;
   return (poor - value) / (poor - good);
 }
-
+ 
 export function runPerformanceAudit(metrics: WebVitals): PerformanceScore {
   const recommendations: string[] = [];
   let totalScore = 0;

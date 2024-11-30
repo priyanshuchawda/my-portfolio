@@ -1,111 +1,50 @@
-import { ReportHandler, Metric } from 'web-vitals';
+import { ReportHandler } from 'web-vitals';
 
 export interface WebVitals {
-  lcp: number | undefined;
-  fid: number | undefined;
-  cls: number | undefined;
+  lcp: number;  // Largest Contentful Paint
+  fid: number;  // First Input Delay
+  cls: number;  // Cumulative Layout Shift
+  ttfb: number; // Time to First Byte
+  fcp: number;  // First Contentful Paint
+  inp: number;  // Interaction to Next Paint
 }
 
-export function trackWebVitals(onReport: ReportHandler) {
-  import('web-vitals').then(({ getCLS, getFID, getLCP }) => {
-    getCLS(onReport);
-    getFID(onReport);
-    getLCP(onReport);
-  });
+export interface Metric {
+  id: string;
+  name: string;
+  value: number;
+  delta: number;
+  entries: PerformanceEntry[];
+  navigationType: string;
 }
 
-export function processMetric(metric: Metric): WebVitals {
-  const vitals: WebVitals = {
-    lcp: undefined,
-    fid: undefined,
-    cls: undefined,
+export const trackWebVitals = (metrics: Partial<WebVitals>): WebVitals => {
+  const defaultMetrics: WebVitals = {
+    lcp: 0,
+    fid: 0,
+    cls: 0,
+    ttfb: 0,
+    fcp: 0,
+    inp: 0
   };
 
-  switch (metric.name) {
-    case 'CLS':
-      vitals.cls = metric.value;
-      break;
-    case 'FID':
-      vitals.fid = metric.value;
-      break;
-    case 'LCP':
-      vitals.lcp = metric.value;
-      break;
-  }
+  // Ensure all metrics are non-negative
+  const validatedMetrics = Object.entries(metrics).reduce((acc, [key, value]) => {
+    acc[key as keyof WebVitals] = Math.max(0, value || 0);
+    return acc;
+  }, {} as WebVitals);
 
-  return vitals;
-}
-
-export async function measurePageLoad(): Promise<WebVitals> {
-  return new Promise((resolve) => {
-    const vitals: WebVitals = {
-      lcp: undefined,
-      fid: undefined,
-      cls: undefined,
-    };
-
-    trackWebVitals((metric) => {
-      const updatedVitals = processMetric(metric);
-      Object.assign(vitals, updatedVitals);
-
-      if (vitals.lcp !== undefined && vitals.fid !== undefined && vitals.cls !== undefined) {
-        resolve(vitals);
-      }
-    });
-
-    // Resolve after 10 seconds even if not all metrics are collected
-    setTimeout(() => resolve(vitals), 10000);
-  });
-}
-
-const reportVital = (metric: Metric) => {
-  // Send to analytics
-  if (window.gtag) {
-    window.gtag('event', 'web_vitals', {
-      metric_id: metric.id,
-      metric_name: metric.name,
-      metric_value: metric.value,
-      metric_delta: metric.delta,
-      metric_rating: metric.rating,
-    });
-  }
+  return { ...defaultMetrics, ...validatedMetrics };
 };
 
-export const trackWebVitals = () => {
-  if (typeof window !== 'undefined') {
-    reportVital({
-      id: 'page-load',
-      name: 'page-load',
-      value: performance.now(),
-      delta: 0,
-      rating: 'good',
+export const reportWebVitals = (onPerfEntry?: ReportHandler): void => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getLCP, getFCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getLCP(onPerfEntry);
+      getFCP(onPerfEntry);
+      getTTFB(onPerfEntry);
     });
   }
-};
-
-export const collectWebVitals = (): Promise<WebVitals> => {
-  return new Promise((resolve) => {
-    const vitals: Partial<WebVitals> = {};
-
-    const reportVital = (metric: Metric) => {
-      switch (metric.name) {
-        case 'CLS':
-          vitals.cls = metric.value;
-          break;
-        case 'FID':
-          vitals.fid = metric.value;
-          break;
-        case 'LCP':
-          vitals.lcp = metric.value;
-          break;
-      }
-
-      // Check if all vitals are collected
-      if (vitals.cls !== undefined && vitals.fid !== undefined && vitals.lcp !== undefined) {
-        resolve(vitals as WebVitals);
-      }
-    };
-
-    trackWebVitals(reportVital);
-  });
 };

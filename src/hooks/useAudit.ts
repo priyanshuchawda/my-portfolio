@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { runAccessibilityAudit, AccessibilityIssue } from '../utils/accessibilityAudit';
-import { collectWebVitals, WebVitals } from '../utils/performance';
+import { trackWebVitals, WebVitals } from '../utils/performance';
 import { runPerformanceAudit } from '../utils/performanceAudit';
 
 interface AuditResults {
@@ -28,12 +28,12 @@ export const useAudit = (runOnMount = false) => {
       await new Promise(resolve => setTimeout(resolve, 100));
 
       // Run parallel audits
-      const [accessibilityAudit, webVitals] = await Promise.all([
+      const [accessibilityAudit, metrics] = await Promise.all([
         runAccessibilityAudit(),
-        collectWebVitals()
+        trackWebVitals({})
       ]);
 
-      const performanceAudit = await runPerformanceAudit(webVitals);
+      const performanceAudit = await runPerformanceAudit(metrics);
 
       setAuditResults({
         accessibility: {
@@ -42,7 +42,7 @@ export const useAudit = (runOnMount = false) => {
         },
         performance: {
           score: performanceAudit.score,
-          metrics: webVitals,
+          metrics,
           recommendations: performanceAudit.recommendations
         }
       });
@@ -67,6 +67,23 @@ export const useAudit = (runOnMount = false) => {
       }
     };
   }, [runOnMount, runComprehensiveAudit]);
+
+  useEffect(() => {
+    const metrics: Partial<WebVitals> = {};
+
+    // Track initial page load metrics
+    trackWebVitals(metrics);
+
+    // Track metrics on route change
+    const handleRouteChange = () => {
+      trackWebVitals(metrics);
+    };
+
+    window.addEventListener('popstate', handleRouteChange);
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
+  }, []);
 
   return {
     auditResults,

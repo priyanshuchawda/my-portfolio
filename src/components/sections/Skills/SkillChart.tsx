@@ -1,62 +1,57 @@
-import { useEffect, useRef } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { useState } from 'react';
 
 interface Skill {
   name: string;
-  level: number; // 0 to 100
-  color: string;
+  level: number;
+  category: string;
 }
 
 interface SkillChartProps {
   skills: Skill[];
-  title: string;
 }
 
-const SkillChart = ({ skills, title }: SkillChartProps) => {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
+export const SkillChart = ({ skills }: SkillChartProps) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    }
-  }, [controls, inView]);
+  const categories = ['all', ...new Set(skills.map(skill => skill.category))];
+
+  const filteredSkills = selectedCategory === 'all'
+    ? skills
+    : skills.filter(skill => skill.category === selectedCategory);
 
   return (
-    <div ref={ref} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-      <h3 className="text-xl font-semibold mb-6 text-gray-800 dark:text-white">
-        {title}
-      </h3>
+    <div className="space-y-6">
+      <div className="flex flex-wrap gap-2">
+        {categories.map(category => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`px-4 py-2 rounded-lg capitalize ${
+              selectedCategory === category
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
       <div className="space-y-4">
-        {skills.map((skill, index) => (
-          <div key={skill.name} className="relative">
-            <div className="flex justify-between mb-1">
+        {filteredSkills.map(skill => (
+          <div key={skill.name} className="space-y-2">
+            <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 {skill.name}
               </span>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 {skill.level}%
               </span>
             </div>
             <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={controls}
-                variants={{
-                  visible: {
-                    width: `${skill.level}%`,
-                    transition: {
-                      duration: 1,
-                      delay: index * 0.2,
-                      ease: 'easeOut',
-                    },
-                  },
-                }}
-                className={`h-full rounded-full ${skill.color}`}
+              <div
+                className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                style={{ width: `${skill.level}%` }}
               />
             </div>
           </div>
@@ -65,5 +60,3 @@ const SkillChart = ({ skills, title }: SkillChartProps) => {
     </div>
   );
 };
-
-export default SkillChart;

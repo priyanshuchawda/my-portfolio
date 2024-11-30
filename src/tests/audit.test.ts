@@ -13,7 +13,7 @@ describe('AccessibilityAudit', () => {
     expect(result).toHaveProperty('score');
     expect(result).toHaveProperty('issues');
     expect(Array.isArray(result.issues)).toBe(true);
-  });
+  }); 
 
   it('should handle empty issues list', () => {
     const issues: AccessibilityIssue[] = [];

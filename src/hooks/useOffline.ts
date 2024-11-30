@@ -11,7 +11,7 @@ export function useOffline() {
     function handleOffline() {
       setIsOffline(true);
     }
-
+ 
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 

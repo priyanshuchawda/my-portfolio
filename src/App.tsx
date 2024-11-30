@@ -1,58 +1,35 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary';
+import LoadingSpinner from './components/layout/LoadingSpinner';
 import { ThemeProvider } from './context/ThemeContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import LoadingSpinner from './components/layout/LoadingSpinner';
-import Navbar from './components/layout/Navbar';
-import Footer from './components/layout/Footer';
-import { trackWebVitals } from './utils/performance';
-import { runPerformanceAudit } from './utils/performanceAudit';
-import { Routes, Route } from 'react-router-dom';
 
-// Lazy load components
+// Lazy load pages
 const Home = React.lazy(() => import('./pages/Home'));
 const About = React.lazy(() => import('./pages/About'));
 const Projects = React.lazy(() => import('./pages/Projects'));
 const Contact = React.lazy(() => import('./pages/Contact'));
-
-const App: React.FC = () => {
-  useEffect(() => {
-    // Track web vitals
-    trackWebVitals((metric) => {
-      // Send to analytics
-      console.log(metric);
-      // Run performance audit
-      runPerformanceAudit({ lcp: metric.value, fid: undefined, cls: undefined });
-    });
-  }, []);
-
-  const InteractiveBackground = React.lazy(() => 
-    import('./components/3d/InteractiveBackground').then(module => ({ default: module.InteractiveBackground }))
-  );
-
+ 
+function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
         <AccessibilityProvider>
-          <div className="min-h-screen bg-white dark:bg-gray-900">
+          <Router>
             <Suspense fallback={<LoadingSpinner />}>
-              <InteractiveBackground />
-              <Navbar />
-              <main className="container mx-auto px-4 py-8">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/contact" element={<Contact />} />
-                </Routes>
-              </main>
-              <Footer />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
             </Suspense>
-          </div>
+          </Router>
         </AccessibilityProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
-};
+}
 
 export default App;

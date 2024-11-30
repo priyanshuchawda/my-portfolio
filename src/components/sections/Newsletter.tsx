@@ -14,7 +14,7 @@ const Newsletter = () => {
       // Replace with your newsletter API endpoint
       const response = await fetch('/api/newsletter', {
         method: 'POST',
-        headers: {
+        headers: { 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),

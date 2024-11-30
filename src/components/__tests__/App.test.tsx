@@ -11,7 +11,7 @@ describe('App Component', () => {
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </HelmetProvider>
+      </HelmetProvider> 
     );
     
     expect(screen.getByText('Priyanshu Chawda')).toBeInTheDocument();

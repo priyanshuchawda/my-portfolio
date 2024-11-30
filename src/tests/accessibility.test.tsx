@@ -1,60 +1,30 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AccessibilityContext, AccessibilityContextType } from '../context/AccessibilityContext';
-import React from 'react';
+import { AccessibilityProvider, useAccessibility } from '../context/AccessibilityContext';
 
 const TestComponent = () => {
   const {
-    reduceMotion,
+    colorBlindnessMode,
+    setColorBlindnessMode,
     highContrast,
+    setHighContrast,
     fontSize,
-    colorBlindMode,
-    screenReaderMode,
-    keyboardNavigation,
-    toggleReduceMotion,
-    toggleHighContrast,
-    increaseFontSize,
-    decreaseFontSize,
-    setColorBlindMode,
-    toggleScreenReaderMode,
-    toggleKeyboardNavigation,
-  } = React.useContext(AccessibilityContext) as AccessibilityContextType;
+    setFontSize,
+  } = useAccessibility();
 
   return (
     <div>
-      <button onClick={toggleReduceMotion} data-testid="toggle-motion">
-        {reduceMotion ? 'Motion Reduced' : 'Motion Enabled'}
-      </button>
-      <button onClick={toggleHighContrast} data-testid="toggle-contrast">
-        {highContrast ? 'High Contrast' : 'Normal Contrast'}
-      </button>
-      <button onClick={increaseFontSize} data-testid="increase-font">
-        Increase ({fontSize}px)
-      </button>
-      <button onClick={decreaseFontSize} data-testid="decrease-font">
-        Decrease ({fontSize}px)
-      </button>
-      <select
-        value={colorBlindMode}
-        onChange={(e) => setColorBlindMode(e.target.value as any)}
-        data-testid="color-blind-mode"
-      >
-        <option value="normal">Normal</option>
-        <option value="deuteranopia">Deuteranopia</option>
-        <option value="protanopia">Protanopia</option>
-        <option value="tritanopia">Tritanopia</option>
-      </select>
-      <button onClick={toggleScreenReaderMode} data-testid="toggle-screen-reader">
-        {screenReaderMode ? 'Screen Reader On' : 'Screen Reader Off'}
-      </button>
-      <button onClick={toggleKeyboardNavigation} data-testid="toggle-keyboard">
-        {keyboardNavigation ? 'Keyboard Nav On' : 'Keyboard Nav Off'}
-      </button>
+      <div data-testid="color-mode">{colorBlindnessMode}</div>
+      <div data-testid="contrast">{highContrast.toString()}</div>
+      <div data-testid="font-size">{fontSize}</div>
+      <button onClick={() => setColorBlindnessMode('protanopia')}>Set Protanopia</button>
+      <button onClick={() => setHighContrast(true)}>Enable High Contrast</button>
+      <button onClick={() => setFontSize('large')}>Set Large Font</button>
     </div>
   );
 };
 
-describe('Accessibility Features', () => {
+describe('AccessibilityContext', () => {
   beforeEach(() => {
     // Mock localStorage
     const localStorageMock = {
@@ -77,127 +47,32 @@ describe('Accessibility Features', () => {
     }));
   });
 
-  const mockContext: AccessibilityContextType = {
-    theme: 'light',
-    toggleTheme: vi.fn(),
-    reduceMotion: false,
-    toggleReduceMotion: vi.fn(),
-    colorBlindMode: 'none',
-    setColorBlindMode: vi.fn(),
-    fontSize: 16,
-    increaseFontSize: vi.fn(),
-    decreaseFontSize: vi.fn(),
-    resetFontSize: vi.fn(),
-    highContrast: false,
-    toggleHighContrast: vi.fn(),
-    screenReaderMode: false,
-    toggleScreenReaderMode: vi.fn(),
-    keyboardNavigation: false,
-    toggleKeyboardNavigation: vi.fn(),
-  };
-
-  it('provides default accessibility settings', () => {
+  it('provides default values', () => {
     render(
-      <AccessibilityContext.Provider value={mockContext}>
+      <AccessibilityProvider>
         <TestComponent />
-      </AccessibilityContext.Provider>
+      </AccessibilityProvider>
     );
 
-    expect(screen.getByTestId('toggle-motion')).toHaveTextContent('Motion Enabled');
-    expect(screen.getByTestId('toggle-contrast')).toHaveTextContent('Normal Contrast');
-    expect(screen.getByTestId('color-blind-mode')).toHaveValue('none');
-    expect(screen.getByTestId('toggle-screen-reader')).toHaveTextContent('Screen Reader Off');
-    expect(screen.getByTestId('toggle-keyboard')).toHaveTextContent('Keyboard Nav Off');
+    expect(screen.getByTestId('color-mode')).toHaveTextContent('none');
+    expect(screen.getByTestId('contrast')).toHaveTextContent('false');
+    expect(screen.getByTestId('font-size')).toHaveTextContent('medium');
   });
 
-  it('toggles reduce motion', () => {
+  it('updates values correctly', () => {
     render(
-      <AccessibilityContext.Provider value={mockContext}>
+      <AccessibilityProvider>
         <TestComponent />
-      </AccessibilityContext.Provider>
+      </AccessibilityProvider>
     );
 
-    const button = screen.getByTestId('toggle-motion');
-    fireEvent.click(button);
-    expect(button).toHaveTextContent('Motion Reduced');
-  });
+    fireEvent.click(screen.getByText('Set Protanopia'));
+    expect(screen.getByTestId('color-mode')).toHaveTextContent('protanopia');
 
-  it('toggles high contrast', () => {
-    render(
-      <AccessibilityContext.Provider value={mockContext}>
-        <TestComponent />
-      </AccessibilityContext.Provider>
-    );
+    fireEvent.click(screen.getByText('Enable High Contrast'));
+    expect(screen.getByTestId('contrast')).toHaveTextContent('true');
 
-    const button = screen.getByTestId('toggle-contrast');
-    fireEvent.click(button);
-    expect(button).toHaveTextContent('High Contrast');
-  });
-
-  it('changes font size within bounds', () => {
-    render(
-      <AccessibilityContext.Provider value={mockContext}>
-        <TestComponent />
-      </AccessibilityContext.Provider>
-    );
-
-    const increaseButton = screen.getByTestId('increase-font');
-    const decreaseButton = screen.getByTestId('decrease-font');
-
-    // Test increase
-    fireEvent.click(increaseButton);
-    expect(increaseButton).toHaveTextContent('Increase (17px)');
-
-    // Test decrease
-    fireEvent.click(decreaseButton);
-    expect(decreaseButton).toHaveTextContent('Decrease (16px)');
-
-    // Test upper bound
-    for (let i = 0; i < 10; i++) {
-      fireEvent.click(increaseButton);
-    }
-    expect(increaseButton).toHaveTextContent('Increase (24px)');
-
-    // Test lower bound
-    for (let i = 0; i < 10; i++) {
-      fireEvent.click(decreaseButton);
-    }
-    expect(decreaseButton).toHaveTextContent('Decrease (12px)');
-  });
-
-  it('changes color blind mode', () => {
-    render(
-      <AccessibilityContext.Provider value={mockContext}>
-        <TestComponent />
-      </AccessibilityContext.Provider>
-    );
-
-    const select = screen.getByTestId('color-blind-mode');
-    fireEvent.change(select, { target: { value: 'deuteranopia' } });
-    expect(select).toHaveValue('deuteranopia');
-  });
-
-  it('toggles screen reader mode', () => {
-    render(
-      <AccessibilityContext.Provider value={mockContext}>
-        <TestComponent />
-      </AccessibilityContext.Provider>
-    );
-
-    const button = screen.getByTestId('toggle-screen-reader');
-    fireEvent.click(button);
-    expect(button).toHaveTextContent('Screen Reader On');
-  });
-
-  it('toggles keyboard navigation', () => {
-    render(
-      <AccessibilityContext.Provider value={mockContext}>
-        <TestComponent />
-      </AccessibilityContext.Provider>
-    );
-
-    const button = screen.getByTestId('toggle-keyboard');
-    fireEvent.click(button);
-    expect(button).toHaveTextContent('Keyboard Nav On');
+    fireEvent.click(screen.getByText('Set Large Font'));
+    expect(screen.getByTestId('font-size')).toHaveTextContent('large');
   });
 });

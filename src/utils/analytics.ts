@@ -17,7 +17,7 @@ export const logEvent = (category: string, action: string, label?: string) => {
     action,
     label,
   });
-};
+}; 
 
 // Track user interactions
 export const trackUserInteraction = (elementName: string, action: string) => {

@@ -16,7 +16,7 @@ const timelineData: TimelineItem[] = [
     description: "Leading development of web applications using modern technologies. Implementing scalable solutions and mentoring junior developers.",
     technologies: ["React", "Node.js", "TypeScript", "AWS"]
   },
-  // Add more timeline items here
+  // Add more timeline items here 
 ];
 
 const Timeline = () => {

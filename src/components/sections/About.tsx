@@ -17,7 +17,7 @@ const About = () => {
         </p>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
           Beyond coding, I'm an avid problem solver who enjoys tackling complex challenges and contributing to open-source projects. I believe in continuous learning and staying updated with the latest technological advancements.
-        </p>
+        </p> 
         
         <div className="flex flex-wrap gap-4">
           <span className="px-4 py-2 bg-blue-100 dark:bg-blue-900 rounded-full text-blue-600 dark:text-blue-300">

@@ -14,7 +14,7 @@ export interface AuditResult {
   score: number;
   issues: AccessibilityIssue[];
 }
-
+ 
 function calculateAccessibilityScore(issues: AccessibilityIssue[]): number {
   const impactWeights: Record<ImpactLevel, number> = {
     minor: 1,

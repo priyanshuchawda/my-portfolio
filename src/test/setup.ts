@@ -12,7 +12,7 @@ vi.mock('react', async () => {
   return {
     ...actual,
     useRef: useRefMock,
-  };
+  }; 
 });
 
 // Mock React Router hooks

@@ -16,7 +16,7 @@ vi.mock('./components/Background', () => ({
 const mockIntersectionObserver = vi.fn();
 mockIntersectionObserver.mockReturnValue({
   observe: () => null,
-  unobserve: () => null,
+  unobserve: () => null, 
   disconnect: () => null,
 });
 window.IntersectionObserver = mockIntersectionObserver;

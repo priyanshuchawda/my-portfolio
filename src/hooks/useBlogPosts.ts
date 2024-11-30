@@ -9,7 +9,7 @@ interface BlogPost {
   readTime: string;
   tags: string[];
   url: string;
-}
+} 
 
 const BLOG_POSTS: BlogPost[] = [
   {

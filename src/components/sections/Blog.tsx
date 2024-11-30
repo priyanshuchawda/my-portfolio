@@ -13,7 +13,7 @@ interface Post {
   publishedAt: string;
   categories: Category[];
   url: string;
-}
+} 
 
 const BLOG_POSTS: Post[] = [
   {

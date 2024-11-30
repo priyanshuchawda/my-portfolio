@@ -17,7 +17,7 @@ export default function OfflineNotification() {
           <p className="font-bold">You are currently offline</p>
           <p className="text-sm">Some features may be limited until you restore your connection.</p>
         </div>
-      </div>
+      </div> 
     </div>
   );
 }

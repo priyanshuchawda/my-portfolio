@@ -15,7 +15,7 @@ const Hero = () => {
               Hi, I'm Priyanshu
             </span>
           </h1>
-
+ 
           <div className="text-xl sm:text-2xl md:text-3xl text-gray-700 dark:text-gray-300 mb-8 h-[60px]">
             <TypeAnimation
               sequence={[

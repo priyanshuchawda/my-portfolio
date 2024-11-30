@@ -38,7 +38,7 @@ const SEO = ({
     ],
     knowsAbout: [
       'Web Development',
-      'React',
+      'React',  
       'TypeScript',
       'Node.js',
       'AI/ML',

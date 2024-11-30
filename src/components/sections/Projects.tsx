@@ -11,7 +11,7 @@ const projects = [
     githubUrl: 'https://github.com/priyanshuchawda/ecommerce-platform',
     category: 'Full Stack',
   },
-  {
+  { 
     title: 'Task Management App',
     description: 'A collaborative task management application with real-time updates and team features.',
     image: '/project2.jpg',

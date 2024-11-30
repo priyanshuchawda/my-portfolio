@@ -14,7 +14,7 @@ afterEach(() => {
 
 const ThrowError = () => {
   throw new Error('Test error');
-};
+}; 
 
 describe('ErrorBoundary', () => {
   it('renders children when there is no error', () => {

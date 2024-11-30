@@ -1,50 +1,45 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
-export interface AccessibilityContextType {
-  colorBlindnessMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
-  setColorBlindnessMode: (mode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia') => void;
-  highContrastMode: boolean;
-  setHighContrastMode: (enabled: boolean) => void;
-  fontSize: string;
-  setFontSize: (size: string) => void;
+type ColorBlindnessMode = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
+type FontSize = 'small' | 'medium' | 'large';
+
+interface AccessibilityContextType {
+  colorBlindnessMode: ColorBlindnessMode;
+  setColorBlindnessMode: (mode: ColorBlindnessMode) => void;
+  highContrast: boolean;
+  setHighContrast: (enabled: boolean) => void;
+  fontSize: FontSize;
+  setFontSize: (size: FontSize) => void;
   screenReaderMode: boolean;
   setScreenReaderMode: (enabled: boolean) => void;
-  keyboardNavigationMode: boolean;
-  setKeyboardNavigationMode: (enabled: boolean) => void;
+  keyboardMode: boolean;
+  setKeyboardMode: (enabled: boolean) => void;
 }
 
-export const AccessibilityContext = createContext<AccessibilityContextType | null>(null);
-
-export const useAccessibility = () => {
-  const context = useContext(AccessibilityContext);
-  if (!context) {
-    throw new Error('useAccessibility must be used within an AccessibilityProvider');
-  }
-  return context;
-};
+const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
 
 interface AccessibilityProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ children }) => {
-  const [colorBlindnessMode, setColorBlindnessMode] = useState<'none' | 'protanopia' | 'deuteranopia' | 'tritanopia'>('none');
-  const [highContrastMode, setHighContrastMode] = useState(false);
-  const [fontSize, setFontSize] = useState<string>('medium');
+export const AccessibilityProvider = ({ children }: AccessibilityProviderProps) => {
+  const [colorBlindnessMode, setColorBlindnessMode] = useState<ColorBlindnessMode>('none');
+  const [highContrast, setHighContrast] = useState(false);
+  const [fontSize, setFontSize] = useState<FontSize>('medium');
   const [screenReaderMode, setScreenReaderMode] = useState(false);
-  const [keyboardNavigationMode, setKeyboardNavigationMode] = useState(false);
+  const [keyboardMode, setKeyboardMode] = useState(false);
 
-  const value = {
+  const value: AccessibilityContextType = {
     colorBlindnessMode,
     setColorBlindnessMode,
-    highContrastMode,
-    setHighContrastMode,
+    highContrast,
+    setHighContrast,
     fontSize,
     setFontSize,
     screenReaderMode,
     setScreenReaderMode,
-    keyboardNavigationMode,
-    setKeyboardNavigationMode,
+    keyboardMode,
+    setKeyboardMode,
   };
 
   return (
@@ -52,4 +47,12 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ ch
       {children}
     </AccessibilityContext.Provider>
   );
+};
+
+export const useAccessibility = (): AccessibilityContextType => {
+  const context = useContext(AccessibilityContext);
+  if (context === undefined) {
+    throw new Error('useAccessibility must be used within an AccessibilityProvider');
+  }
+  return context;
 };

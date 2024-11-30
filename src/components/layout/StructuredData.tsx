@@ -12,7 +12,7 @@ const StructuredData = () => {
       'https://twitter.com/your-twitter'
     ],
     jobTitle: 'Full Stack Developer',
-    worksFor: {
+    worksFor: { 
       '@type': 'Organization',
       name: 'PES MCOE'
     },

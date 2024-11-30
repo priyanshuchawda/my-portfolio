@@ -9,7 +9,7 @@ export default {
       type: 'string',
       validation: (Rule: any) => Rule.required()
     },
-    {
+    { 
       name: 'slug',
       title: 'Slug',
       type: 'slug',

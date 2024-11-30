@@ -13,7 +13,7 @@ export const usePerformanceMetrics = () => {
     fid: 0,
     lcp: 0,
   });
-
+ 
   useEffect(() => {
     const logMetric = (metric: Metric) => {
       switch (metric.name) {

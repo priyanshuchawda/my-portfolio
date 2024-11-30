@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -70,7 +70,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider>
         <AccessibilityProvider>
-          <Router basename="/portfolio" future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <Router basename="/portfolio">
             <AppContent />
           </Router>
         </AccessibilityProvider>

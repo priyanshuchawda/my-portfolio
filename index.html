@@ -2,34 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    
+    <!-- Security -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self';" />
-    <title>Priyanshu Portfolio</title>
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+    
+    <title>Priyanshu Portfolio - Full Stack Developer</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Explore Priyanshu's portfolio showcasing projects in web development, DSA, and more." />
+    <meta name="description" content="Explore Priyanshu's portfolio showcasing innovative projects in web development, DSA, and software engineering. Discover my skills, experience, and passion for creating impactful solutions." />
     <meta name="author" content="Priyanshu" />
-    <meta name="keywords" content="Portfolio, Web Development, Projects, DSA, Priyanshu" />
-    <meta property="og:title" content="Priyanshu Portfolio" />
-    <meta property="og:description" content="Explore Priyanshu's portfolio showcasing projects in web development, DSA, and more." />
+    <meta name="keywords" content="Portfolio, Web Development, Full Stack Developer, React, TypeScript, Node.js, Projects, DSA, Software Engineering, Priyanshu" />
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://your-portfolio-domain.com" />
-    <meta property="og:image" content="https://your-portfolio-domain.com/preview-image.jpg" />
+    <meta property="og:title" content="Priyanshu Portfolio - Full Stack Developer" />
+    <meta property="og:description" content="Explore Priyanshu's portfolio showcasing innovative projects in web development, DSA, and software engineering. Discover my skills, experience, and passion for creating impactful solutions." />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:alt" content="Priyanshu Portfolio Preview" />
+    <meta property="og:url" content="https://priyanshuportfolio.com" />
+    <meta property="og:site_name" content="Priyanshu Portfolio" />
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Priyanshu Portfolio" />
-    <meta name="twitter:description" content="Explore Priyanshu's portfolio showcasing projects in web development, DSA, and more." />
-    <meta name="twitter:image" content="https://your-portfolio-domain.com/preview-image.jpg" />
-
+    <meta name="twitter:title" content="Priyanshu Portfolio - Full Stack Developer" />
+    <meta name="twitter:description" content="Explore Priyanshu's portfolio showcasing innovative projects in web development, DSA, and software engineering." />
+    <meta name="twitter:image" content="/twitter-image.jpg" />
+    <meta name="twitter:image:alt" content="Priyanshu Portfolio Preview" />
+    
     <!-- Preload Critical Resources -->
     <link rel="modulepreload" href="/src/main.tsx" as="script" crossorigin="anonymous" />
-    <link rel="preload" href="/vite.svg" as="image" type="image/svg+xml" />
-
+    
     <!-- Fonts with optimized loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
     <link
       rel="preload"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       as="style"
       crossorigin="anonymous"
       onload="this.onload=null;this.rel='stylesheet'"
@@ -37,56 +51,37 @@
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         crossorigin="anonymous"
       />
     </noscript>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0ea5e9" />
+    <meta name="msapplication-TileColor" content="#0ea5e9" />
+    
+    <!-- Preload State -->
+    <script>
+      try {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    </script>
   </head>
-  <body>
+  <body class="bg-white dark:bg-gray-900">
     <div id="root"></div>
-
-    <!-- SVG Filters for Color Blindness -->
-    <svg style="display: none;">
-      <!-- Deuteranopia Filter -->
-      <filter id="deuteranopia-filter">
-        <feColorMatrix
-          type="matrix"
-          values="0.625, 0.375, 0, 0, 0
-                  0.7, 0.3, 0, 0, 0
-                  0, 0.3, 0.7, 0, 0
-                  0, 0, 0, 1, 0"
-        />
-      </filter>
-      
-      <!-- Protanopia Filter -->
-      <filter id="protanopia-filter">
-        <feColorMatrix
-          type="matrix"
-          values="0.567, 0.433, 0, 0, 0
-                  0.558, 0.442, 0, 0, 0
-                  0, 0.242, 0.758, 0, 0
-                  0, 0, 0, 1, 0"
-        />
-      </filter>
-      
-      <!-- Tritanopia Filter -->
-      <filter id="tritanopia-filter">
-        <feColorMatrix
-          type="matrix"
-          values="0.95, 0.05, 0, 0, 0
-                  0, 0.433, 0.567, 0, 0
-                  0, 0.475, 0.525, 0, 0
-                  0, 0, 0, 1, 0"
-        />
-      </filter>
-    </svg>
-
-    <noscript>
-      <p>Please enable JavaScript to view this website.</p>
-    </noscript>
     <script type="module" src="/src/main.tsx"></script>
+    <noscript>
+      <div style="padding: 2rem; text-align: center;">
+        <h1>JavaScript Required</h1>
+        <p>Please enable JavaScript to view this website.</p>
+      </div>
+    </noscript>
   </body>
 </html>

@@ -56,18 +56,24 @@ const Hero = () => {
             transition={{ delay: 0.5, duration: 0.5 }}
             className="flex justify-center space-x-6"
           >
-            <a
-              href="#contact"
+            <button
+              onClick={() => {
+                const contactSection = document.getElementById('contact');
+                contactSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="px-8 py-3 text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg hover:opacity-90 transition-all hover:scale-105 shadow-lg hover:shadow-xl"
             >
               Get in Touch
-            </a>
-            <a
-              href="#projects"
+            </button>
+            <button
+              onClick={() => {
+                const projectsSection = document.getElementById('projects');
+                projectsSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="px-8 py-3 text-lg font-medium text-blue-600 dark:text-blue-400 border-2 border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-800 transition-all hover:scale-105"
             >
               View Projects
-            </a>
+            </button>
           </motion.div>
 
           <motion.div

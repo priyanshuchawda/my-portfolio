@@ -10,27 +10,21 @@ const Newsletter = () => {
     e.preventDefault();
     setStatus('loading');
 
-    try {
-      // Replace with your newsletter API endpoint
-      const response = await fetch('/api/newsletter', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
+    // Simulate API call with a timeout
+    setTimeout(() => {
+      try {
+        // For demo purposes, just show success
         setStatus('success');
-        setMessage('Thank you for subscribing!');
+        setMessage('Thank you for subscribing! (Demo Mode)');
         setEmail('');
-      } else {
-        throw new Error('Subscription failed');
+        
+        // You can implement actual newsletter subscription here
+        console.log('Newsletter subscription for:', email);
+      } catch (error) {
+        setStatus('error');
+        setMessage('Something went wrong. Please try again.');
       }
-    } catch (error) {
-      setStatus('error');
-      setMessage('Something went wrong. Please try again.');
-    }
+    }, 1000);
   };
 
   return (
@@ -51,23 +45,28 @@ const Newsletter = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
               />
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50"
+                className={`px-6 py-2 rounded-lg font-medium transition-all ${
+                  status === 'loading'
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-lg'
+                }`}
               >
                 {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
               </button>
             </div>
+            
             {message && (
               <motion.p
                 initial={{ opacity: 0 }}

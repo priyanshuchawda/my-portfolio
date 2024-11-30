@@ -2,12 +2,91 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self';">
     <title>Priyanshu Portfolio</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Explore Priyanshu's portfolio showcasing projects in web development, DSA, and more." />
+    <meta name="author" content="Priyanshu" />
+    <meta name="keywords" content="Portfolio, Web Development, Projects, DSA, Priyanshu" />
+    <meta property="og:title" content="Priyanshu Portfolio" />
+    <meta property="og:description" content="Explore Priyanshu's portfolio showcasing projects in web development, DSA, and more." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://your-portfolio-domain.com" />
+    <meta property="og:image" content="https://your-portfolio-domain.com/preview-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Priyanshu Portfolio" />
+    <meta name="twitter:description" content="Explore Priyanshu's portfolio showcasing projects in web development, DSA, and more." />
+    <meta name="twitter:image" content="https://your-portfolio-domain.com/preview-image.jpg" />
+
+    <!-- Preload Critical Resources -->
+    <link rel="modulepreload" href="/src/main.tsx" as="script" crossorigin="anonymous" />
+    <link rel="preload" href="/vite.svg" as="image" type="image/svg+xml" />
+
+    <!-- Fonts with optimized loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    <link 
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      as="style"
+      crossorigin="anonymous"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link 
+        rel="stylesheet" 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        crossorigin="anonymous"
+      />
+    </noscript>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   </head>
   <body>
     <div id="root"></div>
+    
+    <!-- SVG Filters for Color Blindness -->
+    <svg style="display: none;">
+      <!-- Deuteranopia Filter -->
+      <filter id="deuteranopia-filter">
+        <feColorMatrix
+          type="matrix"
+          values="0.625, 0.375, 0, 0, 0
+                  0.7, 0.3, 0, 0, 0
+                  0, 0.3, 0.7, 0, 0
+                  0, 0, 0, 1, 0"
+        />
+      </filter>
+      
+      <!-- Protanopia Filter -->
+      <filter id="protanopia-filter">
+        <feColorMatrix
+          type="matrix"
+          values="0.567, 0.433, 0, 0, 0
+                  0.558, 0.442, 0, 0, 0
+                  0, 0.242, 0.758, 0, 0
+                  0, 0, 0, 1, 0"
+        />
+      </filter>
+      
+      <!-- Tritanopia Filter -->
+      <filter id="tritanopia-filter">
+        <feColorMatrix
+          type="matrix"
+          values="0.95, 0.05, 0, 0, 0
+                  0, 0.433, 0.567, 0, 0
+                  0, 0.475, 0.525, 0, 0
+                  0, 0, 0, 1, 0"
+        />
+      </filter>
+    </svg>
+
+    <noscript>
+      <p>Please enable JavaScript to view this website.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

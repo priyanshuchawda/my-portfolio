@@ -7,8 +7,8 @@ const projects = [
     description: 'A full-stack e-commerce platform with real-time inventory management and payment processing.',
     image: '/project1.jpg',
     technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'],
-    liveUrl: '#',
-    githubUrl: '#',
+    liveUrl: 'https://ecommerce.priyanshuchawda.com',
+    githubUrl: 'https://github.com/priyanshuchawda/ecommerce-platform',
     category: 'Full Stack',
   },
   {
@@ -16,8 +16,8 @@ const projects = [
     description: 'A collaborative task management application with real-time updates and team features.',
     image: '/project2.jpg',
     technologies: ['React', 'Firebase', 'Material-UI', 'TypeScript'],
-    liveUrl: '#',
-    githubUrl: '#',
+    liveUrl: 'https://tasks.priyanshuchawda.com',
+    githubUrl: 'https://github.com/priyanshuchawda/task-manager',
     category: 'Web App',
   },
   {
@@ -25,8 +25,8 @@ const projects = [
     description: 'An AI-powered image generation tool using state-of-the-art machine learning models.',
     image: '/project3.jpg',
     technologies: ['Python', 'TensorFlow', 'Flask', 'React'],
-    liveUrl: '#',
-    githubUrl: '#',
+    liveUrl: 'https://ai-image.priyanshuchawda.com',
+    githubUrl: 'https://github.com/priyanshuchawda/ai-image-generator',
     category: 'AI/ML',
   },
   // Add more projects as needed

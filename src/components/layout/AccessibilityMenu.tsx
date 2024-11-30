@@ -1,161 +1,123 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAccessibility } from '../../context/AccessibilityContext';
+import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useAccessibility } from '../../context/AccessibilityContext';
 
-export default function AccessibilityMenu() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { darkMode, toggleDarkMode } = useTheme();
+export const AccessibilityMenu: React.FC = () => {
+  const { theme } = useTheme();
   const {
-    colorBlindMode,
+    colorBlindnessMode,
+    setColorBlindnessMode,
+    highContrastMode,
+    setHighContrastMode,
+    fontSize,
+    setFontSize,
     screenReaderMode,
-    keyboardNavigation,
-    reduceMotion,
-    setColorBlindMode,
-    toggleScreenReaderMode,
-    toggleKeyboardNavigation,
-    toggleReduceMotion,
+    setScreenReaderMode,
+    keyboardNavigationMode,
+    setKeyboardNavigationMode,
   } = useAccessibility();
 
   return (
-    <div className="fixed left-6 top-20 z-50">
-      {/* Toggle Button */}
+    <div className="fixed right-4 bottom-4 z-50">
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg shadow-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-        aria-label="Toggle accessibility menu"
+        className="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+        aria-label="Open accessibility menu"
       >
         <svg
-          className="w-6 h-6 text-gray-700 dark:text-gray-300"
+          className="w-6 h-6 text-gray-800 dark:text-white"
           fill="none"
-          viewBox="0 0 24 24"
           stroke="currentColor"
+          viewBox="0 0 24 24"
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
           />
         </svg>
       </button>
 
-      {/* Menu Panel */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute left-0 top-12 bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 w-80 max-h-[calc(100vh-8rem)] overflow-y-auto"
-          >
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Accessibility Options</h2>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  aria-label="Close menu"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+      <div className="absolute right-0 bottom-12 w-64 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+          Accessibility Settings
+        </h2>
 
-              {/* Color Blind Mode */}
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Color Blind Mode</label>
-                <select
-                  value={colorBlindMode}
-                  onChange={(e) => setColorBlindMode(e.target.value as any)}
-                  className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                >
-                  <option value="normal">Normal</option>
-                  <option value="deuteranopia">Deuteranopia (Red-Green)</option>
-                  <option value="protanopia">Protanopia (Red Weak)</option>
-                  <option value="tritanopia">Tritanopia (Blue-Yellow)</option>
-                </select>
-              </div>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Color Blindness Mode
+            </label>
+            <select
+              value={colorBlindnessMode}
+              onChange={(e) => setColorBlindnessMode(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option value="none">None</option>
+              <option value="protanopia">Protanopia</option>
+              <option value="deuteranopia">Deuteranopia</option>
+              <option value="tritanopia">Tritanopia</option>
+            </select>
+          </div>
 
-              {/* Screen Reader Mode */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Screen Reader Mode</span>
-                <button
-                  onClick={toggleScreenReaderMode}
-                  className={`${
-                    screenReaderMode ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
-                  } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                >
-                  <span
-                    className={`${
-                      screenReaderMode ? 'translate-x-6' : 'translate-x-1'
-                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                  />
-                </button>
-              </div>
+          <div>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={highContrastMode}
+                onChange={(e) => setHighContrastMode(e.target.checked)}
+                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              />
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                High Contrast Mode
+              </span>
+            </label>
+          </div>
 
-              {/* Keyboard Navigation */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Keyboard Navigation</span>
-                <button
-                  onClick={toggleKeyboardNavigation}
-                  className={`${
-                    keyboardNavigation ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
-                  } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                >
-                  <span
-                    className={`${
-                      keyboardNavigation ? 'translate-x-6' : 'translate-x-1'
-                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                  />
-                </button>
-              </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              Font Size
+            </label>
+            <select
+              value={fontSize}
+              onChange={(e) => setFontSize(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            >
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
 
-              {/* Reduce Motion */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Reduce Motion</span>
-                <button
-                  onClick={toggleReduceMotion}
-                  className={`${
-                    reduceMotion ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
-                  } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                >
-                  <span
-                    className={`${
-                      reduceMotion ? 'translate-x-6' : 'translate-x-1'
-                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                  />
-                </button>
-              </div>
+          <div>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={screenReaderMode}
+                onChange={(e) => setScreenReaderMode(e.target.checked)}
+                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              />
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                Screen Reader Mode
+              </span>
+            </label>
+          </div>
 
-              {/* Theme Toggle */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</span>
-                <button
-                  onClick={toggleDarkMode}
-                  className={`${
-                    darkMode ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
-                  } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                >
-                  <span
-                    className={`${
-                      darkMode ? 'translate-x-6' : 'translate-x-1'
-                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-                  />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={keyboardNavigationMode}
+                onChange={(e) => setKeyboardNavigationMode(e.target.checked)}
+                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              />
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                Keyboard Navigation Mode
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};

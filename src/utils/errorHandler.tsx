@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface ErrorWithMessage {
   message: string;
 }
@@ -74,7 +76,7 @@ export interface FallbackProps {
 }
 
 // Default fallback component for error boundaries
-export function DefaultErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+export function DefaultErrorFallback({ error, resetErrorBoundary }: FallbackProps): React.ReactElement {
   return (
     <div role="alert" className="p-4 bg-red-50 border-l-4 border-red-500">
       <div className="flex">

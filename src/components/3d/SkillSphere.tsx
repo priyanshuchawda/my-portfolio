@@ -1,82 +1,104 @@
-import { useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Text } from '@react-three/drei';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useTheme } from '../../context/ThemeContext';
 
-interface SkillSphereProps {
+export interface SkillSphereProps {
   skills: string[];
+  className?: string;
 }
 
-function Word({ children, ...props }: any) {
-  const color = new THREE.Color();
-  const fontProps = {
-    fontSize: 2.5,
-    letterSpacing: -0.05,
-    lineHeight: 1,
-    'material-toneMapped': false
-  };
-  const ref = useRef<any>();
-  const [hovered, setHovered] = useState(false);
-  const over = (e: any) => (e.stopPropagation(), setHovered(true));
-  const out = () => setHovered(false);
+export const SkillSphere: React.FC<SkillSphereProps> = ({ skills, className }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
-  useFrame(({ camera }) => {
-    ref.current.quaternion.copy(camera.quaternion);
-    ref.current.material.color.lerp(color.set(hovered ? '#fa2720' : 'white'), 0.1);
-  });
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+
+    // Create text sprites for skills
+    const sprites: THREE.Sprite[] = [];
+    const radius = 200;
+
+    skills.forEach((skill, index) => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      if (!context) return;
+
+      canvas.width = 256;
+      canvas.height = 64;
+
+      context.font = '32px Arial';
+      context.fillStyle = theme === 'dark' ? '#ffffff' : '#000000';
+      context.textAlign = 'center';
+      context.fillText(skill, canvas.width / 2, canvas.height / 2);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const sprite = new THREE.Sprite(spriteMaterial);
+
+      // Position on sphere
+      const phi = Math.acos(-1 + (2 * index) / skills.length);
+      const theta = Math.sqrt(skills.length * Math.PI) * phi;
+
+      sprite.position.setFromSphericalCoords(radius, phi, theta);
+      sprite.scale.set(50, 12.5, 1);
+
+      scene.add(sprite);
+      sprites.push(sprite);
+    });
+
+    camera.position.z = 400;
+
+    // Animation
+    let animationFrameId: number;
+    const animate = () => {
+      animationFrameId = requestAnimationFrame(animate);
+      sprites.forEach((sprite) => {
+        sprite.lookAt(camera.position);
+      });
+      scene.rotation.y += 0.001;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Handle resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
+      }
+      window.removeEventListener('resize', handleResize);
+      sprites.forEach((sprite) => {
+        sprite.material.map?.dispose();
+        sprite.material.dispose();
+      });
+      renderer.dispose();
+    };
+  }, [skills, theme]);
 
   return (
-    <Text
-      ref={ref}
-      onPointerOver={over}
-      onPointerOut={out}
-      {...props}
-      {...fontProps}
-      children={children}
+    <div
+      ref={containerRef}
+      className={`w-full h-full ${className || ''}`}
+      aria-hidden="true"
     />
   );
-}
-
-function Cloud({ count = 4, radius = 20 }: { count?: number; radius?: number }) {
-  const skills = [
-    'React', 'TypeScript', 'Node.js', 'Python',
-    'GraphQL', 'Docker', 'AWS', 'MongoDB',
-    'Next.js', 'TailwindCSS', 'PostgreSQL', 'Redis'
-  ];
-
-  const words = useMemo(() => {
-    const temp = [];
-    const spherical = new THREE.Spherical();
-    const phiSpan = Math.PI / (count + 1);
-    const thetaSpan = (Math.PI * 2) / count;
-
-    for (let i = 1; i < count + 1; i++) {
-      for (let j = 0; j < count; j++) {
-        temp.push([
-          new THREE.Vector3().setFromSpherical(
-            spherical.set(radius, phiSpan * i, thetaSpan * j)
-          ),
-          skills[Math.floor(Math.random() * skills.length)]
-        ]);
-      }
-    }
-    return temp;
-  }, [count, radius]);
-
-  return (
-    <>
-      {words.map(([pos, word], index) => (
-        <Word key={index} position={pos} children={word} />
-      ))}
-    </>
-  );
-}
-
-export default function SkillSphere() {
-  return (
-    <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
-      <fog attach="fog" args={['#202025', 0, 80]} />
-      <Cloud count={8} radius={20} />
-    </Canvas>
-  );
-}
+};

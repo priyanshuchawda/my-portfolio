@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
-import { Link } from 'react-scroll';
+import { useAccessibility } from '../../context/AccessibilityContext';
+import { motion } from 'framer-motion';
 
 export default function Navbar() {
+  const { theme, toggleTheme } = useTheme();
+
   const [isOpen, setIsOpen] = useState(false);
-  const { darkMode, toggleDarkMode } = useTheme();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -54,11 +56,11 @@ export default function Navbar() {
             
             {/* Dark Mode Toggle */}
             <button
-              onClick={toggleDarkMode}
+              onClick={toggleTheme}
               className="relative z-[101] p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label="Toggle dark mode"
             >
-              {darkMode ? (
+              {theme === 'dark' ? (
                 <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
@@ -133,10 +135,10 @@ export default function Navbar() {
           
           {/* Mobile Dark Mode Toggle */}
           <button
-            onClick={toggleDarkMode}
+            onClick={toggleTheme}
             className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
           >
-            {darkMode ? 'Light Mode' : 'Dark Mode'}
+            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
           </button>
         </div>
       </motion.div>

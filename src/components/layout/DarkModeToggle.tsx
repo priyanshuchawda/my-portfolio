@@ -1,24 +1,21 @@
+import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import { motion } from 'framer-motion';
 
-export default function DarkModeToggle() {
-  const { darkMode, toggleDarkMode } = useTheme();
+export const DarkModeToggle: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={toggleDarkMode}
-      className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-      aria-label="Toggle dark mode"
+    <button
+      onClick={toggleTheme}
+      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
-      {darkMode ? (
+      {theme === 'dark' ? (
         <svg
-          className="w-5 h-5"
+          className="w-6 h-6 text-yellow-400"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             strokeLinecap="round"
@@ -29,11 +26,10 @@ export default function DarkModeToggle() {
         </svg>
       ) : (
         <svg
-          className="w-5 h-5"
+          className="w-6 h-6 text-gray-800"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             strokeLinecap="round"
@@ -43,6 +39,6 @@ export default function DarkModeToggle() {
           />
         </svg>
       )}
-    </motion.button>
+    </button>
   );
-}
+};

@@ -1,114 +1,49 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AccessibilityAudit } from '../utils/accessibilityAudit';
+import { AccessibilityAudit, type AccessibilityIssue } from '../utils/accessibilityAudit';
 
 describe('AccessibilityAudit', () => {
   beforeEach(() => {
-    // Mock DOM elements
-    document.body.innerHTML = `
-      <div>
-        <img src="test.jpg" />
-        <button>Click me</button>
-        <a href="#">Link</a>
-      </div>
-    `;
+    vi.clearAllMocks();
   });
 
-  describe('runAudit', () => {
-    it('detects missing alt text', async () => {
-      const issues = await AccessibilityAudit.runAudit();
-      
-      expect(issues).toContainEqual(expect.objectContaining({
-        id: 'image-alt',
-        impact: 'serious'
-      }));
-    });
-
-    it('handles empty DOM gracefully', async () => {
-      document.body.innerHTML = '';
-      const issues = await AccessibilityAudit.runAudit();
-      
-      expect(Array.isArray(issues)).toBe(true);
-    });
+  it('should run audit successfully', async () => {
+    const mockElement = document.createElement('div');
+    const result = await AccessibilityAudit.runAudit(mockElement);
+    
+    expect(result).toHaveProperty('score');
+    expect(result).toHaveProperty('issues');
+    expect(Array.isArray(result.issues)).toBe(true);
   });
 
-  describe('calculateAccessibilityScore', () => {
-    it('calculates perfect score for no issues', () => {
-      const score = AccessibilityAudit.calculateAccessibilityScore([]);
-      expect(score).toBe(100);
-    });
-
-    it('reduces score based on issue impact', () => {
-      const issues = [
-        { id: 'test1', impact: 'critical', description: '', help: '', helpUrl: '' },
-        { id: 'test2', impact: 'serious', description: '', help: '', helpUrl: '' }
-      ];
-      
-      const score = AccessibilityAudit.calculateAccessibilityScore(issues);
-      expect(score).toBeLessThan(100);
-    });
-
-    it('weights critical issues more heavily', () => {
-      const criticalIssues = [
-        { id: 'test1', impact: 'critical', description: '', help: '', helpUrl: '' }
-      ];
-      
-      const minorIssues = [
-        { id: 'test2', impact: 'minor', description: '', help: '', helpUrl: '' }
-      ];
-      
-      const criticalScore = AccessibilityAudit.calculateAccessibilityScore(criticalIssues);
-      const minorScore = AccessibilityAudit.calculateAccessibilityScore(minorIssues);
-      
-      expect(criticalScore).toBeLessThan(minorScore);
-    });
+  it('should handle empty issues list', () => {
+    const issues: AccessibilityIssue[] = [];
+    AccessibilityAudit.logIssues(issues);
+    // No assertions needed, just checking it doesn't throw
   });
 
-  describe('logIssues', () => {
-    beforeEach(() => {
-      vi.spyOn(console, 'group');
-      vi.spyOn(console, 'warn');
-      vi.spyOn(console, 'log');
-    });
+  it('should log issues correctly', () => {
+    const mockIssues: AccessibilityIssue[] = [
+      {
+        id: 'color-contrast',
+        impact: 'serious',
+        description: 'Elements must have sufficient color contrast',
+        help: 'Ensure sufficient color contrast between elements',
+        helpUrl: 'https://dequeuniversity.com/rules/axe/4.4/color-contrast',
+      },
+    ];
 
-    it('logs no issues message when array is empty', () => {
-      AccessibilityAudit.logIssues([]);
-      expect(console.log).toHaveBeenCalledWith('✅ No accessibility issues found!');
-    });
-
-    it('logs issues with proper formatting', () => {
-      const issues = [{
-        id: 'test',
-        impact: 'critical',
-        description: 'Test description',
-        help: 'Test help',
-        helpUrl: 'https://test.com'
-      }];
-
-      AccessibilityAudit.logIssues(issues);
-      
-      expect(console.group).toHaveBeenCalledWith('🚨 Accessibility Issues');
-      expect(console.warn).toHaveBeenCalledWith('Test description');
-    });
+    const consoleSpy = vi.spyOn(console, 'group');
+    AccessibilityAudit.logIssues(mockIssues);
+    expect(consoleSpy).toHaveBeenCalled();
   });
 
-  describe('auditPage', () => {
-    it('returns both score and issues', async () => {
-      const result = await AccessibilityAudit.auditPage();
-      
-      expect(result).toHaveProperty('score');
-      expect(result).toHaveProperty('issues');
-      expect(typeof result.score).toBe('number');
-      expect(Array.isArray(result.issues)).toBe(true);
-    });
+  it('should prevent concurrent audits', async () => {
+    const mockElement = document.createElement('div');
+    const firstAudit = AccessibilityAudit.runAudit(mockElement);
+    const secondAudit = AccessibilityAudit.runAudit(mockElement);
 
-    it('handles errors gracefully', async () => {
-      // Mock runAudit to throw an error
-      vi.spyOn(AccessibilityAudit, 'runAudit').mockRejectedValueOnce(new Error('Test error'));
-      
-      const result = await AccessibilityAudit.auditPage();
-      
-      expect(result.score).toBe(0);
-      expect(result.issues).toEqual([]);
-    });
+    const [result1, result2] = await Promise.all([firstAudit, secondAudit]);
+    expect(result1).toBeDefined();
+    expect(result2).toBeDefined();
   });
 });

@@ -1,120 +1,55 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 
-interface AccessibilityContextType {
-  colorBlindMode: 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia';
+export interface AccessibilityContextType {
+  colorBlindnessMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
+  setColorBlindnessMode: (mode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia') => void;
+  highContrastMode: boolean;
+  setHighContrastMode: (enabled: boolean) => void;
+  fontSize: string;
+  setFontSize: (size: string) => void;
   screenReaderMode: boolean;
-  keyboardNavigation: boolean;
-  reduceMotion: boolean;
-  setColorBlindMode: (mode: 'normal' | 'deuteranopia' | 'protanopia' | 'tritanopia') => void;
-  toggleScreenReaderMode: () => void;
-  toggleKeyboardNavigation: () => void;
-  toggleReduceMotion: () => void;
+  setScreenReaderMode: (enabled: boolean) => void;
+  keyboardNavigationMode: boolean;
+  setKeyboardNavigationMode: (enabled: boolean) => void;
 }
 
-const AccessibilityContext = createContext<AccessibilityContextType | undefined>(undefined);
+export const AccessibilityContext = createContext<AccessibilityContextType | null>(null);
 
-export function AccessibilityProvider({ children }: { children: React.ReactNode }) {
-  // Initialize states from localStorage or defaults
-  const [colorBlindMode, setColorBlindModeState] = useState<AccessibilityContextType['colorBlindMode']>(() => {
-    const saved = localStorage.getItem('colorBlindMode');
-    return (saved as AccessibilityContextType['colorBlindMode']) || 'normal';
-  });
-
-  const [screenReaderMode, setScreenReaderMode] = useState(() => {
-    return localStorage.getItem('screenReaderMode') === 'true';
-  });
-
-  const [keyboardNavigation, setKeyboardNavigation] = useState(() => {
-    return localStorage.getItem('keyboardNavigation') === 'true';
-  });
-
-  const [reduceMotion, setReduceMotion] = useState(() => {
-    return localStorage.getItem('reduceMotion') === 'true';
-  });
-
-  // Apply color blind mode
-  useEffect(() => {
-    const root = document.documentElement;
-    root.classList.remove('deuteranopia', 'protanopia', 'tritanopia');
-    if (colorBlindMode !== 'normal') {
-      root.classList.add(colorBlindMode);
-    }
-    localStorage.setItem('colorBlindMode', colorBlindMode);
-  }, [colorBlindMode]);
-
-  // Apply screen reader mode
-  useEffect(() => {
-    const root = document.documentElement;
-    if (screenReaderMode) {
-      root.setAttribute('role', 'application');
-      root.setAttribute('aria-label', 'Portfolio Website');
-    } else {
-      root.removeAttribute('role');
-      root.removeAttribute('aria-label');
-    }
-    localStorage.setItem('screenReaderMode', String(screenReaderMode));
-  }, [screenReaderMode]);
-
-  // Apply keyboard navigation
-  useEffect(() => {
-    const root = document.documentElement;
-    if (keyboardNavigation) {
-      root.classList.add('keyboard-nav');
-    } else {
-      root.classList.remove('keyboard-nav');
-    }
-    localStorage.setItem('keyboardNavigation', String(keyboardNavigation));
-  }, [keyboardNavigation]);
-
-  // Apply reduce motion
-  useEffect(() => {
-    const root = document.documentElement;
-    if (reduceMotion) {
-      root.classList.add('reduce-motion');
-    } else {
-      root.classList.remove('reduce-motion');
-    }
-    localStorage.setItem('reduceMotion', String(reduceMotion));
-  }, [reduceMotion]);
-
-  const setColorBlindMode = (mode: AccessibilityContextType['colorBlindMode']) => {
-    setColorBlindModeState(mode);
-  };
-
-  const toggleScreenReaderMode = () => {
-    setScreenReaderMode(prev => !prev);
-  };
-
-  const toggleKeyboardNavigation = () => {
-    setKeyboardNavigation(prev => !prev);
-  };
-
-  const toggleReduceMotion = () => {
-    setReduceMotion(prev => !prev);
-  };
-
-  return (
-    <AccessibilityContext.Provider
-      value={{
-        colorBlindMode,
-        screenReaderMode,
-        keyboardNavigation,
-        reduceMotion,
-        setColorBlindMode,
-        toggleScreenReaderMode,
-        toggleKeyboardNavigation,
-        toggleReduceMotion,
-      }}
-    >
-      {children}
-    </AccessibilityContext.Provider>
-  );
-}
-
-export function useAccessibility() {
+export const useAccessibility = () => {
   const context = useContext(AccessibilityContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAccessibility must be used within an AccessibilityProvider');
   }
   return context;
+};
+
+interface AccessibilityProviderProps {
+  children: React.ReactNode;
 }
+
+export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ children }) => {
+  const [colorBlindnessMode, setColorBlindnessMode] = useState<'none' | 'protanopia' | 'deuteranopia' | 'tritanopia'>('none');
+  const [highContrastMode, setHighContrastMode] = useState(false);
+  const [fontSize, setFontSize] = useState<string>('medium');
+  const [screenReaderMode, setScreenReaderMode] = useState(false);
+  const [keyboardNavigationMode, setKeyboardNavigationMode] = useState(false);
+
+  const value = {
+    colorBlindnessMode,
+    setColorBlindnessMode,
+    highContrastMode,
+    setHighContrastMode,
+    fontSize,
+    setFontSize,
+    screenReaderMode,
+    setScreenReaderMode,
+    keyboardNavigationMode,
+    setKeyboardNavigationMode,
+  };
+
+  return (
+    <AccessibilityContext.Provider value={value}>
+      {children}
+    </AccessibilityContext.Provider>
+  );
+};

@@ -1,79 +1,93 @@
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useRef, useMemo, useEffect } from 'react';
-import * as THREE from 'three';
-import { inSphere } from 'maath/random';
+import React, { useEffect, useRef } from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import { useThree as useThreeContext } from '../../context/ThreeContext';
+import * as THREE from 'three';
 
-function Particles({ count = 1000 }) {
-  const { darkMode } = useTheme();
-  const threeContext = useThreeContext();
-  
-  const points = useRef<THREE.Points>(null!);
-  const positions = useMemo(() => new Float32Array(count * 3), [count]);
-  const colors = useMemo(() => new Float32Array(count * 3), [count]);
+interface InteractiveBackgroundProps {
+  className?: string;
+}
+
+export const InteractiveBackground: React.FC<InteractiveBackgroundProps> = ({ className }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
-    if (points.current) {
-      inSphere(positions, { radius: 20 });
-      const color = new THREE.Color(darkMode ? 0x666666 : 0x333333);
-      for (let i = 0; i < count; i++) {
-        color.toArray(colors, i * 3);
-      }
-      points.current.geometry.attributes.position.needsUpdate = true;
-      points.current.geometry.attributes.color.needsUpdate = true;
-    }
-  }, [darkMode, positions, colors, count]);
+    const container = containerRef.current;
+    if (!container) return;
 
-  useFrame((state) => {
-    if (points.current) {
-      points.current.rotation.x = state.clock.elapsedTime * 0.05;
-      points.current.rotation.y = state.clock.elapsedTime * 0.05;
-    }
-  });
+    // Setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 
-  const particleMaterial = useMemo(() => {
-    return new THREE.PointsMaterial({
-      size: 0.05,
-      sizeAttenuation: true,
-      vertexColors: true,
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+
+    // Create particles
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const particleCount = 1000;
+
+    for (let i = 0; i < particleCount; i++) {
+      vertices.push(
+        Math.random() * 2000 - 1000,
+        Math.random() * 2000 - 1000,
+        Math.random() * 2000 - 1000
+      );
+    }
+
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+    const material = new THREE.PointsMaterial({
+      size: 2,
+      color: theme === 'dark' ? 0xffffff : 0x000000,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.5,
     });
-  }, []);
+
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+
+    camera.position.z = 1000;
+
+    // Animation
+    let animationFrameId: number;
+    const animate = () => {
+      animationFrameId = requestAnimationFrame(animate);
+      particles.rotation.x += 0.0001;
+      particles.rotation.y += 0.0001;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Handle resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
+      }
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [theme]);
 
   return (
-    <points ref={points}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          count={colors.length / 3}
-          array={colors}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <primitive object={particleMaterial} />
-    </points>
+    <div
+      ref={containerRef}
+      className={`fixed top-0 left-0 w-full h-full -z-10 ${className || ''}`}
+      aria-hidden="true"
+    />
   );
-}
-
-export default function InteractiveBackground() {
-  const { darkMode } = useTheme();
-
-  return (
-    <div className="absolute inset-0 -z-10">
-      <Canvas
-        camera={{ position: [0, 0, 15], fov: 75 }}
-        style={{ background: darkMode ? '#111827' : '#ffffff' }}
-      >
-        <Particles />
-      </Canvas>
-    </div>
-  );
-}
+};

@@ -1,0 +1,75 @@
+{
+  "name": "Priyanshu Chawda Portfolio",
+  "short_name": "Priyanshu Portfolio",
+  "description": "Portfolio of Priyanshu Chawda, a Full-Stack Developer specializing in modern web technologies and AI/ML solutions.",
+  "start_url": "/portfolio/",
+  "scope": "/portfolio/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
+  "orientation": "portrait",
+  "categories": ["portfolio", "development", "technology"],
+  "icons": [
+    {
+      "src": "/portfolio/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/portfolio/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/portfolio/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/portfolio/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/portfolio/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/portfolio/screenshot-wide.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Portfolio Homepage"
+    },
+    {
+      "src": "/portfolio/screenshot-narrow.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Portfolio Mobile View"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Projects",
+      "url": "/portfolio/#projects",
+      "description": "View my projects"
+    },
+    {
+      "name": "Contact",
+      "url": "/portfolio/#contact",
+      "description": "Get in touch"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "handle_links": "preferred"
+}
